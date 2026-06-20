@@ -85,12 +85,25 @@ chsh -s "$(which fish)"
 # tmux
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 cat > ~/.tmux.conf << 'EOF'
+set-window-option -g mode-keys vi
 set -g mouse on
+unbind-key -T copy-mode-vi MouseDragEnd1Pane
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X noop
+bind-key -T copy-mode-vi y send-keys -X copy-selection
+#bind-key -T copy-mode-vi Enter send-keys -X copy-selection
+bind-key -n DoubleClick1Pane copy-mode -M \; send-keys -X select-word
+bind-key -n TripleClick1Pane copy-mode -M \; send-keys -X select-line
+
+set -g default-terminal "xterm-256color"
 
 bind-key h select-pane -L
 bind-key j select-pane -D
 bind-key k select-pane -U
 bind-key l select-pane -R
+
+bind -n F1 previous-window
+bind -n F2 next-window
+bind -n F3 new-window
 
 set-option -g status-position top
 
@@ -99,8 +112,10 @@ set -g base-index 1
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'catppuccin/tmux'
 
-set -g @catppuccin_lavour 'mocha'
+set -g @catppuccin_flavour 'mocha'
 set -g @catppuccin_window_status_style 'rounded'
+set -g @catppuccin_window_text "#W"
+set -g @catppuccin_window_current_text "#W"
 
 run '~/.tmux/plugins/tpm/tpm'
 EOF
